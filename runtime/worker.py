@@ -64,6 +64,18 @@ SAMPLE_RATE = 44100
 _PROTOCOL = sys.stdout
 sys.stdout = sys.stderr
 
+# The Host (Node) always writes UTF-8 into our stdin, but on Windows Python
+# decodes pipe stdin with the legacy ANSI code page (cp1252/cp1250), where the
+# second UTF-8 byte of characters like "č" (0x8D) or "đ" (0x90) is undefined.
+# One such character raises UnicodeDecodeError inside the stdin loop and kills
+# the worker, so replies containing Croatian diacritics are never synthesized.
+# Force UTF-8 on every platform and substitute a stray invalid byte with
+# U+FFFD instead of crashing. No-op on Linux/macOS, where stdin already is UTF-8.
+try:
+    sys.stdin.reconfigure(encoding="utf-8", errors="replace")
+except (AttributeError, ValueError):
+    pass
+
 from supertonic import TTS  # noqa: E402  (must come after the stdout swap)
 
 

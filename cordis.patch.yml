@@ -2,9 +2,9 @@
     - id: dsh-tts-supertonic
       name: dsh-tts-supertonic
       config:
-        pythonPath: python3
-        runtimePath: ''
-        modelPath: ''
+        pythonPath: 
+        runtimePath: 
+        modelPath: 
         voice: F1
         language: hr
         enabled: true
