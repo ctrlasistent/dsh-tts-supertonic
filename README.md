@@ -1,6 +1,5 @@
 `dsh-tts-supertonic` is a plugin for `deepseek-harness` that converts assistant replies 
-into speech using the Supertonic 3 ONNX model.
-Text is never sent to the cloud; everything is processed locally on your device. 
+into speech using the Supertonic 3 ONNX model.  Text is never sent to the cloud; everything is processed locally on your device. 
 
 **Requirements**
 
@@ -21,9 +20,13 @@ python -c "import supertonic, numpy, onnxruntime; print('ok')"
 
 **Debian GNU/Linux**
 
-Since Debian 12, `pip install` refuses to touch the system interpreter (PEP 668, *externally-managed-environment*), so use a virtual environment as shown below.
-The plugin spawns `python3` by default on Linux, so no alias package is needed.  
+Since Debian 12, `pip install` refuses to install packages into the system Python environment (PEP 668, externally managed environment). Therefore, use a virtual environment as shown below.
 
+If absolutely necessary, you can bypass this restriction using:
+```pip install supertonic numpy onnxruntime --break-system-packages```  
+**Note**: Using `--break-system-packages` is **not** recommended, as it may interfere with system-managed Python package
+
+Recommended approach:
 ```  
 sudo apt update
 sudo apt install python3 python3-venv
@@ -34,7 +37,7 @@ python3 -m venv ~/.dsh-tts-venv
 ```  
 If the self-test prints `ok`, the environment is ready. 
 
-On Linux, point the plugin to the venv interpreter in `cordis.patch.yml`:  
+On Linux, configure the plugin to use the virtual environment's Python interpreter by setting pythonPath in `cordis.patch.yml`:  
 ```  
 dsh-tts-supertonic:  
     pythonPath: "/home/<user>/.dsh-tts-venv/bin/python"
